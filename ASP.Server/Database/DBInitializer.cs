@@ -17,19 +17,23 @@ namespace ASP.Server.Database
             if (bookDbContext.Books.Any())
                 return;
 
-            Genre SF, Classic, Romance, Thriller;
+            Genre SF, Classic, Romance, Thriller, Programming;
             bookDbContext.Genre.AddRange(
                 SF = new Genre(),
                 Classic = new Genre(),
                 Romance = new Genre(),
-                Thriller = new Genre()
-            );
+                Thriller = new Genre(),
+                Programming = new Genre()
+            ) ;
             bookDbContext.SaveChanges();
 
             // Une fois les moèles complété Vous pouvez faire directement
             // new Book() { Author = "xxx", Name = "yyy", Price = n.nnf, Content = "ccc", Genres = new() { Romance, Thriller } }
             bookDbContext.Books.AddRange(
-                new Book(), 
+                new Book()
+                {
+                    Author = "Adams", Title="How to code in c#", Price=19.99, Content="Ipsum lorem dolor", Genres = new List<Genre> { Programming }
+                },
                 new Book(),
                 new Book(),
                 new Book()
