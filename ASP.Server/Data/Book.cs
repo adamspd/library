@@ -11,8 +11,9 @@ namespace ASP.Server.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
-
-        // Mettez ici les propriété de votre livre: Nom, Autheur, Prix, Contenu et Genres associés
-        // N'oublier pas qu'un livre peut avoir plusieur genres
+        public string Name { get; set; }
+        public string Author { get; set; }
+        public float Price { get; set; }
+        public List<Genre> Genres { get; set; }
     }
 }
