@@ -11,8 +11,9 @@ namespace ASP.Server.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Author { get; set; }
+        public string Content { get; set; }
         public float Price { get; set; }
         public List<Genre> Genres { get; set; }
     }
