@@ -67,8 +67,6 @@ namespace ASP.Server.Api
 
             return NoContent();
         }
-
-        // Should I write the delete genre function ? If so, what do I do with the books in where that was the genre ? remove it ?
     }
 }
 
