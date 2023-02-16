@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ASP.Server.Database;
 
 namespace ASP.Server.Service
 {
@@ -16,7 +17,5 @@ namespace ASP.Server.Service
                 return instance;
             }
         }
-
-        // Ajouter ici toutes vos fonctions qui peuvent être accéder a différent endroit de votre programme
     }
 }
