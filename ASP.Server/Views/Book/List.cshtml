@@ -9,6 +9,12 @@
     <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
     @foreach (var book in Model)
     {
+        <p>
+            <span>@book.Title</span> 
+            <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">
+                <img src="https://img.icons8.com/small/32/null/filled-trash.png" /> 
+            </a>
+        </p>
+       
     }
 </div>
-
