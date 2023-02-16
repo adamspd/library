@@ -61,11 +61,11 @@ namespace ASP.Server.Api
         // Je vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
 
         [HttpGet]
-        public async Task<ActionResult<List<Book>>> GetBooks([FromQuery] int genreId = -1, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
+        public async Task<ActionResult<List<Book>>> GetBooks([FromQuery] List<string> genreList = null, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
         {
             var queryable = libraryDbContext.Books.AsQueryable();
-            var bookListQueryable = genreId != -1 ?
-                queryable.Where(b => b.Genres.Any(g => genreId == g.Id)) :
+            var bookListQueryable = genreList != null ?
+                queryable.Where(b => b.Genres.Any(g => genreList.Contains(g.Id.ToString()))) :
                 queryable;
             var totalBooks = await bookListQueryable.CountAsync();
 
