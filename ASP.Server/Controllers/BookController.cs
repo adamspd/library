@@ -24,7 +24,7 @@ namespace ASP.Server.Controllers
 
         [Required]
         [Display(Name = "prix")]
-        public float Price { get; set; }
+        public Double Price { get; set; }
 
         [Required]
         [Display(Name = "auteur")]
@@ -63,13 +63,64 @@ namespace ASP.Server.Controllers
 
         public ActionResult<List<Book>> DeleteBook(int id)
         {
-            Console.WriteLine("ca marche");
             Book book= libraryDbContext.Books.FirstOrDefault(x => x.Id == id);
             libraryDbContext.Books.Remove(book);
             libraryDbContext.SaveChanges();
 
             return View("List", libraryDbContext.Books.ToList());
         }
+
+        public ActionResult<Book> Edit(int id)
+        {
+            Book book = libraryDbContext.Books.FirstOrDefault(x => x.Id == id);
+
+             return View(book);
+        }
+
+        public ActionResult<CreateBookModel> Update(int id, CreateBookModel createBookModel = null)
+        {
+            Book book = libraryDbContext.Books.Include(b => b.Genres).FirstOrDefault(b => b.Id == id);
+
+            List<int> genresId = new List<int>();
+
+            foreach (var genre in book.Genres)
+            {
+                genresId.Add(genre.Id);
+            }
+
+            CreateBookModel bookModel = new CreateBookModel()
+            {
+                Title = book.Title,
+                AllGenres = libraryDbContext.Genre.ToList(),
+                Author = book.Author,
+                Content = book.Content,
+                Genres = genresId,
+                Price = book.Price
+            };
+
+            if (createBookModel.Title != null)
+            {
+                book.Title = createBookModel.Title;
+                book.Price = createBookModel.Price;
+                book.Author = createBookModel.Author;
+                book.Content = createBookModel.Content;
+                book.Genres.Clear();
+
+                foreach (var genreId in createBookModel.Genres)
+                {
+                    var genre = libraryDbContext.Genre.FirstOrDefault(genre => genre.Id == genreId);
+                    if (genre == null) { return View(bookModel); }
+
+                    book.Genres.Add(genre);
+                }
+
+                libraryDbContext.SaveChanges();
+                return View("List", libraryDbContext.Books.ToList());
+            }
+
+            return View(bookModel);
+        }
+
 
         public ActionResult<CreateBookModel> Create(CreateBookModel book)
         {
