@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP.Server.Database;
+using ASP.Server.Data;
+using Microsoft.VisualBasic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ASP.Server.Api
 {
@@ -56,11 +59,146 @@ namespace ASP.Server.Api
 
 
         // Je vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
-        public ActionResult<List<Book>> GetBooks()
+
+        [HttpGet]
+        public async Task<ActionResult<List<Book>>> GetBooks([FromQuery] List<int> genreList, [FromQuery] int offset = 0, [FromQuery] int limit = 10)
         {
-            throw new NotImplementedException("You have to do it your self");
+            var queryable = libraryDbContext.Books.AsQueryable();
+            var bookListQueryable = (genreList != null && genreList.Any()) ?
+                queryable.Where(b => b.Genres.Any(g => genreList.Contains(g.Id))) :
+                queryable;
+            var totalBooks = await bookListQueryable.CountAsync();
+
+            var bookList = await bookListQueryable
+                .Include(b => b.Genres)
+                .OrderBy(b => b.Id)
+                .Skip(offset - 1)
+                .Take(limit)
+                .ToListAsync();
+
+            var paginationHeader = $"{offset}-{offset + bookList.Count - 1}/{totalBooks}";
+            Response.Headers.Add("Pagination", paginationHeader);
+
+            return Ok(bookList.Select(b => new Book
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Author = b.Author,
+                Price = b.Price,
+                Genres = b.Genres
+            }));
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult<Book>> GetBook(int bookId)
+        {
+            var book = await libraryDbContext.Books
+                .Include(b => b.Genres)
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return book;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Book>> AddBook([FromBody] BookDto newBookDto)
+        {
+            // Create a new Book object using the properties of the BookDto object
+            var newBook = new Book
+            {
+                Title = newBookDto.Title,
+                Author = newBookDto.Author,
+                Content = newBookDto.Content,
+                Price = newBookDto.Price ?? 0,
+                Genres = new List<Genre>()
+            };
+
+            // Add genres to the new book
+            if (newBookDto.GenreIds != null)
+            {
+                foreach (var genreId in newBookDto.GenreIds)
+                {
+                    var genre = await libraryDbContext.Genre.FindAsync(genreId);
+                    if (genre == null)
+                    {
+                        genre = new Genre { Id = genreId };
+                        libraryDbContext.Genre.Add(genre);
+                    }
+                    newBook.Genres.Add(genre);
+                }
+            }
+
+            // Add the new book to the context and save changes
+            libraryDbContext.Books.Add(newBook);
+            await libraryDbContext.SaveChangesAsync();
+
+            // Return the newly added book with its ID set
+            return CreatedAtAction(nameof(GetBook), new { bookId = newBook.Id }, newBook);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Book>> UpdateBook(int bookId, [FromBody] BookDto updatedBookDto)
+        {
+            // Retrieve the book from the database
+            var bookToUpdate = await libraryDbContext.Books
+                .Include(b => b.Genres)
+                .FirstOrDefaultAsync(b => b.Id == bookId);
+
+            if (bookToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Update the book with the properties of the updated BookDto object
+            bookToUpdate.Title = updatedBookDto.Title;
+            bookToUpdate.Author = updatedBookDto.Author;
+            bookToUpdate.Content = updatedBookDto.Content;
+            bookToUpdate.Price = updatedBookDto.Price ?? 0;
+            bookToUpdate.Genres.Clear();
+
+            // Add genres to the book
+            if (updatedBookDto.GenreIds != null)
+            {
+                foreach (var genreId in updatedBookDto.GenreIds)
+                {
+                    var genre = await libraryDbContext.Genre.FindAsync(genreId);
+                    if (genre == null)
+                    {
+                        genre = new Genre { Id = genreId };
+                        libraryDbContext.Genre.Add(genre);
+                    }
+                    bookToUpdate.Genres.Add(genre);
+                }
+            }
+
+            // Save changes to the database
+            await libraryDbContext.SaveChangesAsync();
+
+            // Return the updated book
+            return Ok(bookToUpdate);
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            // Find the book to delete
+            var book = await libraryDbContext.Books.FindAsync(bookId);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            // Remove the book from the context and save changes
+            libraryDbContext.Books.Remove(book);
+            await libraryDbContext.SaveChangesAsync();
+
+            // Return a 204 No Content response
+            return NoContent();
+        }
     }
 }
 
