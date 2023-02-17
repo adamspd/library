@@ -36,7 +36,7 @@ label {
 
     <div class="input-group">
         <label asp-for="Genres">Genres</label>
-        <select asp-for="Genres" asp-items="@(new SelectList(Model.AllGenres, "Id", "Name", Model.Genres))">
+        <select asp-for="Genres" asp-items="@(new SelectList(Model.AllGenres, "Id", "Name", Model.AllGenres))">
         </select>
     </div>
     <input type="submit" value="Save" style="width: 100%; margin-top: 50px" />

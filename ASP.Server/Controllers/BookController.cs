@@ -24,7 +24,7 @@ namespace ASP.Server.Controllers
 
         [Required]
         [Display(Name = "prix")]
-        public float Price { get; set; }
+        public Double Price { get; set; }
 
         [Required]
         [Display(Name = "auteur")]
@@ -85,36 +85,34 @@ namespace ASP.Server.Controllers
 
             foreach (var genre in book.Genres)
             {
-                genresId.Append(genre.Id);
-
+                genresId.Add(genre.Id);
             }
-            CreateBookModel bookModel = new CreateBookModel() { Title = book.Title, AllGenres = libraryDbContext.Genre.ToList(), Author = book.Author, Content = book.Content, Genres = genresId, Price = book.Price };
-            // Le IsValid est True uniquement si tous les champs de CreateBookModel marqués Required sont remplis
+
+            CreateBookModel bookModel = new CreateBookModel()
+            {
+                Title = book.Title,
+                AllGenres = libraryDbContext.Genre.ToList(),
+                Author = book.Author,
+                Content = book.Content,
+                Genres = genresId,
+                Price = book.Price
+            };
 
             if (createBookModel.Title != null)
             {
+                book.Title = createBookModel.Title;
+                book.Price = createBookModel.Price;
+                book.Author = createBookModel.Author;
+                book.Content = createBookModel.Content;
+                book.Genres.Clear();
 
+                foreach (var genreId in createBookModel.Genres)
+                {
+                    var genre = libraryDbContext.Genre.FirstOrDefault(genre => genre.Id == genreId);
+                    if (genre == null) { return View(bookModel); }
 
-                // var genre = libraryDbContext.Genre.Where(genreDb => book.Genres.Contains(genreDb.Id)).ToList();
-                // new Book() { Genres = genre, Content = book.Content };
-                libraryDbContext.Books.Where(bookDb => bookDb.Id == id).ToList().ForEach(bookMatch => {
-                    bookMatch.Title = createBookModel.Title;
-                    bookMatch.Price = createBookModel.Price;
-                    bookMatch.Author = createBookModel.Author;
-                    bookMatch.Content = createBookModel.Content;
-                    bookMatch.Genres.Clear();
-
-
-                    foreach (var genreId in createBookModel.Genres)
-                    {
-                        var genre = libraryDbContext.Genre.ElementAtOrDefault(genreId);
-                        if (genre == null) { return; };
-
-                        bookMatch.Genres.Add(genre);
-                    }
-
-
-                });
+                    book.Genres.Add(genre);
+                }
 
                 libraryDbContext.SaveChanges();
                 return View("List", libraryDbContext.Books.ToList());
