@@ -63,13 +63,66 @@ namespace ASP.Server.Controllers
 
         public ActionResult<List<Book>> DeleteBook(int id)
         {
-            Console.WriteLine("ca marche");
             Book book= libraryDbContext.Books.FirstOrDefault(x => x.Id == id);
             libraryDbContext.Books.Remove(book);
             libraryDbContext.SaveChanges();
 
             return View("List", libraryDbContext.Books.ToList());
         }
+
+        public ActionResult<Book> Edit(int id)
+        {
+            Book book = libraryDbContext.Books.FirstOrDefault(x => x.Id == id);
+
+             return View(book);
+        }
+
+        public ActionResult<CreateBookModel> Update(int id, CreateBookModel createBookModel = null)
+        {
+            Book book = libraryDbContext.Books.Include(b => b.Genres).FirstOrDefault(b => b.Id == id);
+
+            List<int> genresId = new List<int>();
+
+            foreach (var genre in book.Genres)
+            {
+                genresId.Append(genre.Id);
+
+            }
+            CreateBookModel bookModel = new CreateBookModel() { Title = book.Title, AllGenres = libraryDbContext.Genre.ToList(), Author = book.Author, Content = book.Content, Genres = genresId, Price = book.Price };
+            // Le IsValid est True uniquement si tous les champs de CreateBookModel marqués Required sont remplis
+
+            if (createBookModel.Title != null)
+            {
+
+
+                // var genre = libraryDbContext.Genre.Where(genreDb => book.Genres.Contains(genreDb.Id)).ToList();
+                // new Book() { Genres = genre, Content = book.Content };
+                libraryDbContext.Books.Where(bookDb => bookDb.Id == id).ToList().ForEach(bookMatch => {
+                    bookMatch.Title = createBookModel.Title;
+                    bookMatch.Price = createBookModel.Price;
+                    bookMatch.Author = createBookModel.Author;
+                    bookMatch.Content = createBookModel.Content;
+                    bookMatch.Genres.Clear();
+
+
+                    foreach (var genreId in createBookModel.Genres)
+                    {
+                        var genre = libraryDbContext.Genre.ElementAtOrDefault(genreId);
+                        if (genre == null) { return; };
+
+                        bookMatch.Genres.Add(genre);
+                    }
+
+
+                });
+
+                libraryDbContext.SaveChanges();
+                return View("List", libraryDbContext.Books.ToList());
+            }
+
+            return View(bookModel);
+        }
+
 
         public ActionResult<CreateBookModel> Create(CreateBookModel book)
         {

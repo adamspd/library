@@ -10,9 +10,12 @@
     @foreach (var book in Model)
     {
         <p>
-            <span>@book.Title</span> 
+            <span>@book.Title</span>
             <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">
-                <img src="https://img.icons8.com/small/32/null/filled-trash.png" /> 
+                <img src="https://img.icons8.com/small/32/null/filled-trash.png" />
+            </a>
+            <a asp-controller="Book" asp-action="Update" asp-route-id="@book.Id">
+                <img src="https://img.icons8.com/ultraviolet/40/null/edit.png" />
             </a>
         </p>
        
