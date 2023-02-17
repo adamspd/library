@@ -1,0 +1,43 @@
+﻿@using ASP.Server.Controllers
+@model CreateBookModel
+@{
+    ViewData["Title"] = "Add a book";
+}
+<style>
+.input-group {
+    margin-top:10px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+input, textarea, select {
+    flex-basis:85%;
+}
+label {
+    flex-basis:10%;
+}
+</style>
+
+<!-- Voici une facon de faire, mais ce n'est pas la seul, a vous de jouer ! --> 
+<form asp-controller="Book" asp-action="Update">
+    <div class="input-group">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" placeholder="@Model.Title" />
+
+        <label asp-for="Content">Content</label>
+        <input asp-for="Content" placeholder="@Model.Content" />
+
+        <label asp-for="Author">Author</label>
+        <input asp-for="Author" placeholder="@Model.Author" />
+
+        <label asp-for="Price">Price</label>
+        <input asp-for="Price" placeholder="@Model.Price" />
+    </div>
+
+    <div class="input-group">
+        <label asp-for="Genres">Genres</label>
+        <select asp-for="Genres" asp-items="@(new SelectList(Model.AllGenres, "Id", "Name", Model.AllGenres))">
+        </select>
+    </div>
+    <input type="submit" value="Save" style="width: 100%; margin-top: 50px" />
+</form>
