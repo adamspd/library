@@ -15,6 +15,22 @@
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <WrapPanel>
+
+            <TextBlock  Text="Title: " />
+            <TextBlock Text="{Binding CurrentBook.Title}" FontWeight="Bold" FontSize="16" />
+
+            <TextBlock Text="Auteur: " />
+            <TextBlock Text="{Binding CurrentBook.Author}" FontStyle="Italic" FontSize="12"/>
+
+            <TextBlock Text="Price: " />
+            <TextBlock Text="{Binding CurrentBook.Price}" FontStyle="Italic" FontSize="12"/>
+
+            <TextBlock  Text="Content: " />
+            <TextBlock Text="{Binding CurrentBook.Content}" FontWeight="Bold" FontSize="16" />
+            
+        </WrapPanel>
+
         <!-- il faut afficher les information du livre: Nom, Auteur, Prix, Genres-->
         <!-- Mais pas le contenu ! -->
         <!-- N'oublier pas le bouton pour aller lire le livre. La commande ReadCommand est faite pour ca ! -->
