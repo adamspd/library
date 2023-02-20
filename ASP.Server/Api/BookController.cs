@@ -71,6 +71,7 @@ namespace ASP.Server.Api
 
             var bookList = await bookListQueryable
                 .Include(b => b.Genres)
+                .Include(b => b.Author)
                 .OrderBy(b => b.Id)
                 .Skip(offset - 1)
                 .Take(limit)
@@ -89,12 +90,20 @@ namespace ASP.Server.Api
             }));
         }
 
+        [HttpGet]
+        public ActionResult<List<Author>> GetAuthors()
+        {
+            return libraryDbContext.Authors.ToList();
+        }
+
+
 
         [HttpGet]
         public async Task<ActionResult<Book>> GetBook(int bookId)
         {
             var book = await libraryDbContext.Books
                 .Include(b => b.Genres)
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(b => b.Id == bookId);
             if (book == null)
             {
@@ -107,10 +116,18 @@ namespace ASP.Server.Api
         public async Task<ActionResult<Book>> AddBook([FromBody] BookDto newBookDto)
         {
             // Create a new Book object using the properties of the BookDto object
+            var author = await libraryDbContext.Authors.FirstOrDefaultAsync(a => a.Name == newBookDto.Author.Name);
+            if (author == null)
+            {
+                // If the author doesn't exist, create a new Author object with the specified name
+                author = new Author { Name = newBookDto.Author.Name };
+                libraryDbContext.Authors.Add(author);
+            }
+
             var newBook = new Book
             {
                 Title = newBookDto.Title,
-                Author = newBookDto.Author,
+                Author = author,
                 Content = newBookDto.Content,
                 Price = newBookDto.Price ?? 0,
                 Genres = new List<Genre>()
@@ -152,9 +169,17 @@ namespace ASP.Server.Api
                 return NotFound();
             }
 
+            var author = await libraryDbContext.Authors.FirstOrDefaultAsync(a => a.Name == updatedBookDto.Author.Name);
+            if (author == null)
+            {
+                // If the author doesn't exist, create a new Author object with the specified name
+                author = new Author { Name = updatedBookDto.Author.Name };
+                libraryDbContext.Authors.Add(author);
+            }
+
             // Update the book with the properties of the updated BookDto object
             bookToUpdate.Title = updatedBookDto.Title;
-            bookToUpdate.Author = updatedBookDto.Author;
+            bookToUpdate.Author = author;
             bookToUpdate.Content = updatedBookDto.Content;
             bookToUpdate.Price = updatedBookDto.Price ?? 0;
             bookToUpdate.Genres.Clear();
