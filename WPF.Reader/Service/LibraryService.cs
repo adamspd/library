@@ -25,9 +25,15 @@ namespace WPF.Reader.Service
 
 
         public ObservableCollection<Book> Books{ get; set; } = new ObservableCollection<Book>();
+        public Book BookById(int id)
+        {
+            
+            return new BookApi().BookGetBook(id);
+        } 
         public LibraryService() {
 
             var listapi = new BookApi().BookGetBooks();
+         //   BookById = new BookApi().BookGetBook();
 
             foreach (var book in listapi)
             {

@@ -18,7 +18,16 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="80" />
         </Grid.RowDefinitions>
-        <!-- On aimerais bien avoir le tire du livre en entête -->
+        <WrapPanel>
+
+            <TextBlock  Text="Titre: " />
+        <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" />
+
+        <TextBlock  Text="Contenu: " />
+        <TextBlock Text="{Binding Description}" FontWeight="Bold" FontSize="16" />
+            </WrapPanel>
+
+                <!-- On aimerais bien avoir le tire du livre en entête -->
 
         <!-- Ainsi que le contenu du livre ! -->
         
