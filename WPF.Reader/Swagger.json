@@ -64,6 +64,31 @@
         }
       }
     },
+    "/api/Book/GetAuthors": {
+      "get": {
+        "tags": [
+          "Book"
+        ],
+        "operationId": "Book_GetAuthors",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Author"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Book/GetBook": {
       "get": {
         "tags": [
@@ -359,7 +384,7 @@
           "type": "string"
         },
         "author": {
-          "type": "string"
+          "$ref": "#/definitions/Author"
         },
         "content": {
           "type": "string"
@@ -373,6 +398,21 @@
           "items": {
             "$ref": "#/definitions/Genre"
           }
+        }
+      }
+    },
+    "Author": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
         }
       }
     },
@@ -398,7 +438,7 @@
           "type": "string"
         },
         "author": {
-          "type": "string"
+          "$ref": "#/definitions/AuthorDto"
         },
         "content": {
           "type": "string"
@@ -413,6 +453,14 @@
             "type": "integer",
             "format": "int32"
           }
+        }
+      }
+    },
+    "AuthorDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
         }
       }
     },

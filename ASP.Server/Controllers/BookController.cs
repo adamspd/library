@@ -118,7 +118,7 @@ namespace ASP.Server.Controllers
                 Price = book.Price
             };
 
-            if (createBookModel.Title != null)
+                if (createBookModel.Title != null)
             {
                 book.Title = createBookModel.Title;
                 book.Price = createBookModel.Price;

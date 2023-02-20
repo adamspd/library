@@ -39,7 +39,7 @@
                         <TextBlock  Text="Title: " />
                         <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" />
                         <TextBlock Text="Auteur: " />
-                        <TextBlock Text="{Binding Author}" FontStyle="Italic" FontSize="12"/>
+                        <TextBlock Text="{Binding Author.Name}" FontStyle="Italic" FontSize="12"/>
                         <TextBlock Text="Genre: " />
                         <!--ItemsControl ItemsSource="{Binding Genres}">
                             <ItemsControl.ItemTemplate>
