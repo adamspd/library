@@ -1,4 +1,6 @@
 ﻿@using ASP.Server.Model
+<link rel="stylesheet" type="text/css" href="~/css/list_book.css">
+
 @model IEnumerable<Book>
 @{
     ViewData["Title"] = "Home Page";
@@ -6,18 +8,44 @@
 
 <div class="listeBooks">
     <h1>Liste des livres:</h1>
-    <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
+
+    <div class="filter">
+        <h3>Filter by:</h3>
+        <form>
+            <div>
+                <span>Author:</span>
+                <select name="author">
+                    <option value="">All</option>
+                    @foreach (var author in ViewBag.Authors)
+                    {
+                        <option value="@author">@author</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <span>Genre:</span>
+                @foreach (var genre in (List<Genre>)ViewData["Genres"])
+                {
+                    <label>
+                        <input type="checkbox" name="genre" value="@genre.Name" />
+                        @genre.Name
+                    </label>
+                }
+            </div>
+            <button type="submit">Filter</button>
+        </form>
+    </div>
+
     @foreach (var book in Model)
     {
-        <p>
-            <span>@book.Title</span>
-            <a asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">
+        <p class="book-info">
+            <span class="book-title">@book.Title</span>
+            <a class="book-icon" asp-controller="Book" asp-action="DeleteBook" asp-route-id="@book.Id">
                 <img src="https://img.icons8.com/small/32/null/filled-trash.png" />
             </a>
-            <a asp-controller="Book" asp-action="Update" asp-route-id="@book.Id">
+            <a class="book-icon" asp-controller="Book" asp-action="Update" asp-route-id="@book.Id">
                 <img src="https://img.icons8.com/ultraviolet/40/null/edit.png" />
             </a>
         </p>
-       
     }
 </div>

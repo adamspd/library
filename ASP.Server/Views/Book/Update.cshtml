@@ -4,18 +4,50 @@
     ViewData["Title"] = "Add a book";
 }
 <style>
-.input-group {
-    margin-top:10px;
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-}
-input, textarea, select {
-    flex-basis:85%;
-}
-label {
-    flex-basis:10%;
-}
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .input-group {
+        width: 48%;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        margin-top: 50px;
+    }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
 </style>
 
 <!-- Voici une facon de faire, mais ce n'est pas la seul, a vous de jouer ! --> 

@@ -15,19 +15,19 @@ namespace ASP.Server.Controllers
     public class CreateBookModel
     {
         [Required]
-        [Display(Name = "titre")]
+        [Display(Name = "Titre")]
         public String Title { get; set; }
 
         [Required]
-        [Display(Name = "contenu")]
+        [Display(Name = "Contenu")]
         public String Content { get; set; }
 
         [Required]
-        [Display(Name = "prix")]
+        [Display(Name = "Prix")]
         public Double Price { get; set; }
 
         [Required]
-        [Display(Name = "auteur")]
+        [Display(Name = "Auteur")]
         public String Author { get; set; }
 
         // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
@@ -40,11 +40,6 @@ namespace ASP.Server.Controllers
     }
 
 
-
-
-
-
-
     public class BookController : Controller
     {
         private readonly LibraryDbContext libraryDbContext;
@@ -54,12 +49,37 @@ namespace ASP.Server.Controllers
             this.libraryDbContext = libraryDbContext;
         }
 
-        public ActionResult<IEnumerable<Book>> List()
+        public ActionResult<IEnumerable<Book>> List(string author, string genre)
         {
-            // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            List<Book> ListBooks = libraryDbContext.Books.ToList();
-            return View(ListBooks);
+            var query = libraryDbContext.Books.AsQueryable();
+
+            // If an author is specified, filter the books by author name
+            if (!string.IsNullOrEmpty(author))
+            {
+                query = query.Where(b => b.Author.Name == author);
+            }
+
+            // If a genre is specified, filter the books by genre name
+            if (!string.IsNullOrEmpty(genre))
+            {
+                query = query.Where(b => b.Genres.Any(g => g.Name == genre));
+            }
+
+            // Retrieve the filtered list of books from the database
+            List<Book> listBooks = query.ToList();
+
+            // Get the list of genres and authors to display in the view
+            var genres = libraryDbContext.Genre.OrderBy(g => g.Name).ToList();
+            var authors = libraryDbContext.Authors.OrderBy(a => a.Name).Select(a => a.Name).ToList();
+
+            // Pass the filtered list of books, the list of genres and the list of authors to the view
+            ViewBag.Authors = authors;
+            ViewData["Genres"] = genres;
+
+            return View(listBooks);
         }
+
+
 
         public ActionResult<List<Book>> DeleteBook(int id)
         {

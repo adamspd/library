@@ -4,20 +4,54 @@
     ViewData["Title"] = "Add a genre";
 }
 <style>
-    .input-group {
-        margin-top: 10px;
+    /* Center the form and add some margin */
+    form {
         display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        margin: 50px auto;
     }
 
-    input, textarea, select {
-        flex-basis: 85%;
+    /* Style the input group container */
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
     }
 
-    label {
-        flex-basis: 10%;
+    /* Style the label */
+    .input-group label {
+        font-size: 1.2em;
+        margin-bottom: 10px;
     }
+
+    /* Style the input field */
+    .input-group input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1.2em;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Style the submit button */
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Change the submit button color on hover */
+    input[type="submit"]:hover {
+        background-color: #3e8e41;
+    }
+
 </style>
 
 
