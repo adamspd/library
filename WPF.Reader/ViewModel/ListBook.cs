@@ -13,12 +13,26 @@ namespace WPF.Reader.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         public Book SelectedBook;
 
-        public Book SelectedLine { get { return SelectedBook; } set { SelectedBook = value; Ioc.Default.GetService<INavigationService>().Navigate<DetailsBook>(SelectedBook); }  }
+        public Book SelectedLine { get { return SelectedBook; } set { 
+                if (value != null)
+                {
+                    var book = value as Book;
+                    SelectedBook = BookById(book.Id);
+                    Ioc.Default.GetService<INavigationService>().Navigate<DetailsBook>(SelectedBook);
+                }
+
+            } 
+        }
 
         public ICommand ItemSelectedCommand { get; set; }
 
         // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
+        public Book BookById(int id)
+        {
+            return Ioc.Default.GetRequiredService<LibraryService>().BookById(id);
+
+        }
 
         
 
