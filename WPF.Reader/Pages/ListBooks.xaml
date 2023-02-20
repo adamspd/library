@@ -24,6 +24,37 @@
             Command="{Binding DataContext.ItemSelectedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" 
             CommandParameter="{Binding .}"
         -->
+
+
+
+
+        <ListBox Name="myListBox" HorizontalAlignment="Left" SelectionMode="Extended" 
+            Width="700" Height="250" Background="HoneyDew"
+            ItemsSource="{Binding Books}" IsSynchronizedWithCurrentItem="true" SelectedValue="{Binding SelectedLine}">
+
+            <ListBox.ItemTemplate>
+
+                <DataTemplate>
+                    <WrapPanel>
+                        <TextBlock  Text="Title: " />
+                        <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" />
+                        <TextBlock Text="Auteur: " />
+                        <TextBlock Text="{Binding Author}" FontStyle="Italic" FontSize="12"/>
+                        <TextBlock Text="Genre: " />
+                        <!--ItemsControl ItemsSource="{Binding Genres}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <WrapPanel>
+                                        <TextBlock Text="{Binding Label}" />
+                                    </WrapPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl-->
+
+                    </WrapPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </Page>
 
