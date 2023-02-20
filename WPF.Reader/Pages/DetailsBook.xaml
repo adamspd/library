@@ -28,7 +28,7 @@
 
 
             <ListBox Name="myListBooksGenres" HorizontalAlignment="Left" SelectionMode="Extended" 
-            Width="700" Height="250" Background="HoneyDew"
+            Width="400" Height="250" Background="HoneyDew"
             ItemsSource="{Binding CurrentBook.Genres}" IsSynchronizedWithCurrentItem="true" >
 
                 <ListBox.ItemTemplate>
@@ -40,11 +40,12 @@
                         </WrapPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+
             </ListBox>
 
-       
             <Button Command="{Binding DataContext.ReadCommand, RelativeSource={RelativeSource FindAncestor,
-                AncestorType={x:Type Page}}}" CommandParameter="{Binding .}" Width="100" Content="Lire le livre" Height="40"/>
+                AncestorType={x:Type Page}}}" CommandParameter="{Binding .}" Width="100" Content="Lire le livre" Height="40" HorizontalAlignment="Center"/>
+
 
         </WrapPanel>
 
