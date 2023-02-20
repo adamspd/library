@@ -79,7 +79,7 @@ namespace ASP.Server.Controllers
 
         public ActionResult<CreateBookModel> Update(int id, CreateBookModel createBookModel = null)
         {
-            Book book = libraryDbContext.Books.Include(b => b.Genres).FirstOrDefault(b => b.Id == id);
+            Book book = libraryDbContext.Books.Include(b => b.Genres).Include(b => b.Author).FirstOrDefault(b => b.Id == id);
 
             List<int> genresId = new List<int>();
 
@@ -130,16 +130,22 @@ namespace ASP.Server.Controllers
                 // Il faut intéroger la base pour récupérer l'ensemble des objets genre qui correspond aux id dans CreateBookModel.Genres
 
 
-
                 var genre = libraryDbContext.Genre.Where(genreDb => book.Genres.Contains( genreDb.Id)).ToList();
-               // new Book() { Genres = genre, Content = book.Content };
+                // new Book() { Genres = genre, Content = book.Content };
 
 
 
 
 
                 // Completer la création du livre avec toute les information nécéssaire que vous aurez ajoutez, et metter la liste des gener récupéré de la base aussi
-                libraryDbContext.Add(new Book() { Genres = genre, Content = book.Content , Price = book.Price, Title = book.Title, Author = book.Author});
+                var author = libraryDbContext.Authors.FirstOrDefault(a => a.Name == book.Author);
+                if (author == null)
+                {
+                    // If the author doesn't exist, create a new Author object with the specified name
+                    author = new Author { Name = book.Author };
+                    libraryDbContext.Authors.Add(author);
+                }
+                libraryDbContext.Add(new Book() { Genres = genre, Content = book.Content , Price = book.Price, Title = book.Title, Author = author});
                 libraryDbContext.SaveChanges();
             }
 
