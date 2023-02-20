@@ -133,6 +133,12 @@ namespace ASP.Server.Controllers
 
                     book.Genres.Add(genre);
                 }
+                var genres = libraryDbContext.Genre.OrderBy(g => g.Name).ToList();
+                var authors = libraryDbContext.Authors.OrderBy(a => a.Name).Select(a => a.Name).ToList();
+
+                // Pass the filtered list of books, the list of genres and the list of authors to the view
+                ViewBag.Authors = authors;
+                ViewData["Genres"] = genres;
 
                 libraryDbContext.SaveChanges();
                 return View("List", libraryDbContext.Books.ToList());
