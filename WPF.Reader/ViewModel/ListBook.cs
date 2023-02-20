@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -10,11 +11,16 @@ namespace WPF.Reader.ViewModel
     internal class ListBook : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public Book SelectedBook;
+
+        public Book SelectedLine { get { return SelectedBook; } set { SelectedBook = value; Ioc.Default.GetService<INavigationService>().Navigate<DetailsBook>(SelectedBook); }  }
 
         public ICommand ItemSelectedCommand { get; set; }
 
         // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
+
+        
 
         public ListBook()
         {
