@@ -19,6 +19,7 @@ namespace WPF.Reader.Service
 
         // C'est aussi ici que vous ajouterez les requête réseau pour récupérer les livres depuis le web service que vous avez fait
         // Vous pourrez alors ajouter les livres obtenu a la variable Books !
+
         // Faite bien attention a ce que votre requête réseau ne bloque pas l'interface 
 
 
