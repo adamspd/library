@@ -2,9 +2,131 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .text-center {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .content-item {
+        width: 150px;
+        height: 100px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .content-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .content-item h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .content-item p {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+    .word-count-stats {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+        .word-count-stats h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .word-count-stats ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .word-count-stats li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+    .stat-label {
+        font-size: 18px;
+        color: #777;
+        flex-basis: 50%;
+    }
+
+    .stat-value {
+        font-size: 16px;
+        color: #333;
+        font-weight: bold;
+        flex-basis: 50%;
+        text-align: right;
+    }
+
+</style>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    <h2>Total Books: @ViewBag.TotalBooks</h2>
+
+    <div class="content">
+        @foreach (var authorBookCount in ViewBag.BookCountsByAuthor)
+        {
+            <div class="content-item">
+                <h3>@authorBookCount.Author</h3>
+                <p>
+                    @authorBookCount.BookCount
+                    book(s)
+                </p>
+            </div>
+        }
+    </div>
+    <div class="word-count-stats">
+        <h2>Word Count Statistics</h2>
+        <ul>
+            <li>
+                <div class="stat-label">Minimum Words:</div>
+                <div class="stat-value">@ViewBag.MinWords</div>
+            </li>
+            <li>
+                <div class="stat-label">Maximum Words:</div>
+                <div class="stat-value">@ViewBag.MaxWords</div>
+            </li>
+            <li>
+                <div class="stat-label">Median Words:</div>
+                <div class="stat-value">@ViewBag.MedianWords</div>
+            </li>
+            <li>
+                <div class="stat-label">Average Words:</div>
+                <div class="stat-value">@ViewBag.AvgWords</div>
+            </li>
+        </ul>
+    </div>
+
+
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-
-
