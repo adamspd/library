@@ -92,7 +92,7 @@ namespace ASP.Server.Controllers
             {
                 Title = book.Title,
                 AllGenres = libraryDbContext.Genre.ToList(),
-                Author = book.Author,
+                Author = book.Author.Name,
                 Content = book.Content,
                 Genres = genresId,
                 Price = book.Price
@@ -102,7 +102,7 @@ namespace ASP.Server.Controllers
             {
                 book.Title = createBookModel.Title;
                 book.Price = createBookModel.Price;
-                book.Author = createBookModel.Author;
+                book.Author.Name = createBookModel.Author;
                 book.Content = createBookModel.Content;
                 book.Genres.Clear();
 
